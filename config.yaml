@@ -1,0 +1,10 @@
+amazon:
+  s3:
+    bucket-name: ${BUCKET_NAME}
+    access-key-id: ${AWS_ACCESS_KEY_ID}
+    secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+kafka:
+  bootstrap-servers: ['localhost:29092']
+  topic-name:
+    input: ${KAFKA_INPUT_TOPIC}
+    output: ${KAFKA_OUTPUT_TOPIC}
