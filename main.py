@@ -1,9 +1,14 @@
+import json
+import logging
+from datetime import datetime
+
+import yaml
+
 from os import remove
 
 from pydub import AudioSegment
-
-from utils.kafka_utils import *
-from utils.s3_utils import *
+from kafka_utils import *
+from s3_utils import *
 
 logging.basicConfig(
     format='%(asctime)s [%(levelname)s] - %(name)s - %(message)s',

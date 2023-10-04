@@ -26,7 +26,7 @@ def prepare_consumer():
 
     consumer = KafkaConsumer(kafka_input_topic,
                              api_version=(0, 11, 5),
-                             group_id=None,
+                             group_id=config_map['kafka']['group-name']['input'],
                              bootstrap_servers=bootstrap_servers,
                              auto_offset_reset='earliest')
     consumer.subscribe([kafka_input_topic])
@@ -35,4 +35,5 @@ def prepare_consumer():
 
 def prepare_producer():
     return KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                         api_version=(0, 11, 5),
                          bootstrap_servers=bootstrap_servers)
