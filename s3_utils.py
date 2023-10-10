@@ -39,7 +39,7 @@ def extract_file_name_from_s3_key(s3_key):
 
 
 def compose_cut_file_name(full_file_name, start_time, end_time):
-    return full_file_name + f"_{start_time / 1000:.1f}_{end_time / 1000:.1f}.mp3"
+    return full_file_name + f"_{start_time / 1000:.1f}_{end_time / 1000:.1f}"
 
 
 def generate_s3_key(basic_key, file_name):

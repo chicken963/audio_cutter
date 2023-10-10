@@ -44,7 +44,7 @@ def trim_remote_audiofile(file_s3_key, start_time, end_time):
     remove(uncut_file_name_local)
     remove(cut_file_name_local)
     logging.info(f"Removed local copies of {uncut_file_name_local} and {cut_file_name_local}")
-    return cut_file_name_local
+    return cut_file_s3_key
 
 
 def main():
@@ -54,17 +54,24 @@ def main():
     kafka_producer = prepare_producer()
 
     for message in kafka_consumer:
-        message_body = json.loads(message.value)
+        try:
+            message_body = json.loads(message.value)
 
-        file_s3_key = message_body['s3_key']
-        start_time = message_body['start_time']
-        end_time = message_body['end_time']
+            file_s3_key = message_body['s3_key']
+            start_time = message_body['start_time']
+            end_time = message_body['end_time']
 
-        file_name_cut = trim_remote_audiofile(file_s3_key, start_time, end_time)
-        kafka_producer.send(kafka_output_topic, {
-            's3_key': file_name_cut,
-            'start_time': start_time,
-            'end_time': end_time})
+            file_name_cut = trim_remote_audiofile(file_s3_key, start_time, end_time)
+
+            kafka_producer.send(kafka_output_topic, {
+                'artist': message_body['artist'],
+                'name': message_body['name'],
+                'duration': message_body['duration'],
+                's3_key': str(file_name_cut),
+                'start_time': start_time,
+                'end_time': end_time})
+        except Exception as e:
+            logging.critical(e, exc_info=True)
 
 
 if __name__ == "__main__":
